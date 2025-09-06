@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Aprende Inglés! - Inicial</title>
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #98FB98);
+            min-height: 100vh;
+            padding: 2vw;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3vw;
+            color: #2E8B57;
+            text-shadow: 0.2vw 0.2vw 0.4vw rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 1vw;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-1vw); }
+            60% { transform: translateY(-0.5vw); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3vw;
+        }
+
+        .section {
+            background: white;
+            border-radius: 2vw;
+            padding: 2.5vw;
+            box-shadow: 0 0.8vw 1.6vw rgba(0,0,0,0.2);
+            border: 0.4vw solid #FFD700;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-0.5vw);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: #FF6347;
+            margin-bottom: 2vw;
+            text-shadow: 0.1vw 0.1vw 0.2vw rgba(0,0,0,0.2);
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1.5vw;
+        }
+
+        .item {
+            background: linear-gradient(145deg, #FFE4E1, #FFF8DC);
+            border-radius: 1.5vw;
+            padding: 1.5vw;
+            text-align: center;
+            cursor: pointer;
+            border: 0.3vw solid #87CEEB;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .item:hover {
+            background: linear-gradient(145deg, #FFB6C1, #F0E68C);
+            transform: scale(1.05);
+            border-color: #FF69B4;
+        }
+
+        .item:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .item:hover:before {
+            animation: shine 0.5s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        .emoji {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1vw;
+            display: block;
+            animation: wiggle 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes wiggle {
+            0% { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
+        }
+
+        .english {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-weight: bold;
+            color: #4169E1;
+            margin-bottom: 0.5vw;
+        }
+
+        .spanish {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: #DC143C;
+            font-style: italic;
+        }
+
+        .audio-btn {
+            background: #32CD32;
+            border: none;
+            border-radius: 50%;
+            width: clamp(25px, 3vw, 30px);
+            height: clamp(25px, 3vw, 30px);
+            margin-top: 0.8vw;
+            cursor: pointer;
+            color: white;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            transition: all 0.2s;
+        }
+
+        .audio-btn:hover {
+            background: #228B22;
+            transform: scale(1.1);
+        }
+
+        .game-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #FF69B4, #87CEEB);
+            color: white;
+            text-align: center;
+        }
+
+        .quiz-container {
+            margin-top: 2vw;
+        }
+
+        .question {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-bottom: 1.5vw;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 1vw;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            background: white;
+            color: #333;
+            padding: 1vw 2vw;
+            border-radius: 2.5vw;
+            cursor: pointer;
+            border: 0.3vw solid transparent;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .option:hover {
+            background: #FFD700;
+            transform: scale(1.05);
+        }
+
+        .option.correct {
+            border-color: #32CD32;
+            background: #90EE90;
+        }
+
+        .option.wrong {
+            border-color: #FF6347;
+            background: #FFA07A;
+        }
+
+        .score {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            margin-top: 1.5vw;
+            font-weight: bold;
+        }
+
+        .floating-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            color: #FFD700;
+            animation: float 6s ease-in-out infinite;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-2vw) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 2vw;
+            }
+
+            .section {
+                padding: 3vw;
+            }
+
+            .item-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+
+            .item {
+                padding: 2vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: clamp(1.5rem, 5vw, 2rem);
+            }
+
+            .section-title {
+                font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+            }
+
+            .item {
+                padding: 2.5vw;
+            }
+
+            .emoji {
+                font-size: clamp(1.5rem, 4vw, 2rem);
+            }
+
+            .english, .spanish {
+                font-size: clamp(0.8rem, 2vw, 0.9rem);
+            }
+
+            .audio-btn {
+                width: clamp(20px, 4vw, 25px);
+                height: clamp(20px, 4vw, 25px);
+            }
+
+            .question {
+                font-size: clamp(1rem, 2.5vw, 1.2rem);
+                line-height: 1.3;
+            }
+
+            .option {
+                padding: 1.5vw 2.5vw;
+                font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-stars"></div>
+    
+    <div class="header">
+        <h1>🌟 ¡Learn English! 🌟</h1>
+        <p>¡Vamos a aprender inglés juntos!</p>
+    </div>
+
+    <div class="container">
+        <!-- Partes del Cuerpo -->
+        <div class="section">
+            <h2 class="section-title">👦 Body Parts / Partes del Cuerpo</h2>
+            <div class="item-grid">
+                <div class="item" onclick="playSound('head')">
+                    <span class="emoji">👤</span>
+                    <div class="english">HEAD</div>
+                    <div class="spanish">Cabeza</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('head')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('eye')">
+                    <span class="emoji">👁️</span>
+                    <div class="english">EYE</div>
+                    <div class="spanish">Ojo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('eye')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('nose')">
+                    <span class="emoji">👃</span>
+                    <div class="english">NOSE</div>
+                    <div class="spanish">Nariz</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('nose')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('mouth')">
+                    <span class="emoji">👄</span>
+                    <div class="english">MOUTH</div>
+                    <div class="spanish">Boca</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('mouth')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('hand')">
+                    <span class="emoji">🤚</span>
+                    <div class="english">HAND</div>
+                    <div class="spanish">Mano</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('hand')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('foot')">
+                    <span class="emoji">🦶</span>
+                    <div class="english">FOOT</div>
+                    <div class="spanish">Pie</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('foot')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('knee')">
+                    <span class="emoji">🦵</span>
+                    <div class="english">KNEE</div>
+                    <div class="spanish">Rodilla</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('knee')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('neck')">
+                    <span class="emoji">🦒</span>
+                    <div class="english">NECK</div>
+                    <div class="spanish">Cuello</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('neck')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('leg')">
+                    <span class="emoji">🦵</span>
+                    <div class="english">LEG</div>
+                    <div class="spanish">Pierna</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('leg')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('arm')">
+                    <span class="emoji">💪</span>
+                    <div class="english">ARM</div>
+                    <div class="spanish">Brazo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('arm')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Familia -->
+        <div class="section">
+            <h2 class="section-title">👨‍👩‍👧‍👦 Family / Familia</h2>
+            <div class="item-grid">
+                <div class="item" onclick="playSound('mother')">
+                    <span class="emoji">👩</span>
+                    <div class="english">MOTHER</div>
+                    <div class="spanish">Mamá</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('mother')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('father')">
+                    <span class="emoji">👨</span>
+                    <div class="english">FATHER</div>
+                    <div class="spanish">Papá</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('father')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('sister')">
+                    <span class="emoji">👧</span>
+                    <div class="english">SISTER</div>
+                    <div class="spanish">Hermana</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('sister')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('brother')">
+                    <span class="emoji">👦</span>
+                    <div class="english">BROTHER</div>
+                    <div class="spanish">Hermano</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('brother')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('grandmother')">
+                    <span class="emoji">👵</span>
+                    <div class="english">GRANDMOTHER</div>
+                    <div class="spanish">Abuela</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('grandmother')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('grandfather')">
+                    <span class="emoji">👴</span>
+                    <div class="english">GRANDFATHER</div>
+                    <div class="spanish">Abuelo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('grandfather')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animales -->
+        <div class="section">
+            <h2 class="section-title">🦉 Animals / Animales</h2>
+            <div class="item-grid">
+                <div class="item" onclick="playSound('owl')">
+                    <span class="emoji">🦉</span>
+                    <div class="english">OWL</div>
+                    <div class="spanish">Búho</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('owl')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('reindeer')">
+                    <span class="emoji">🦌</span>
+                    <div class="english">REINDEER</div>
+                    <div class="spanish">Reno</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('reindeer')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('squirrel')">
+                    <span class="emoji">🐿️</span>
+                    <div class="english">SQUIRREL</div>
+                    <div class="spanish">Ardilla</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('squirrel')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('bear')">
+                    <span class="emoji">🐻</span>
+                    <div class="english">BEAR</div>
+                    <div class="spanish">Oso</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('bear')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('fox')">
+                    <span class="emoji">🦊</span>
+                    <div class="english">FOX</div>
+                    <div class="spanish">Zorro</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('fox')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('wolf')">
+                    <span class="emoji">🐺</span>
+                    <div class="english">WOLF</div>
+                    <div class="spanish">Lobo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('wolf')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('rabbit')">
+                    <span class="emoji">🐰</span>
+                    <div class="english">RABBIT</div>
+                    <div class="spanish">Conejo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('rabbit')">🔊</button>
+                </div>
+                <div class="item" onclick="playSound('hedgehog')">
+                    <span class="emoji">🦔</span>
+                    <div class="english">HEDGEHOG</div>
+                    <div class="spanish">Erizo</div>
+                    <button class="audio-btn" onclick="event.stopPropagation(); playSound('hedgehog')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Juego de Preguntas -->
+        <div class="section game-section">
+            <h2 class="section-title">🎮 ¡Juguemos! / Let's Play!</h2>
+            <div class="quiz-container">
+                <div class="question" id="question">Click "Nueva Pregunta" para empezar</div>
+                <div class="options" id="options"></div>
+                <button onclick="newQuestion()" style="background: #FFD700; color: #333; padding: 1.5vw 3vw; border: none; border-radius: 2.5vw; font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: bold; margin: 2vw; cursor: pointer;">Nueva Pregunta</button>
+                <div class="score" id="score">Puntuación: 0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos para el juego
+        const vocabulary = {
+            // Partes del cuerpo
+            head: 'cabeza', eye: 'ojo', nose: 'nariz', mouth: 'boca', hand: 'mano', foot: 'pie',
+            knee: 'rodilla', neck: 'cuello', leg: 'pierna', arm: 'brazo',
+            // Familia
+            mother: 'mamá', father: 'papá', sister: 'hermana', brother: 'hermano', grandmother: 'abuela', grandfather: 'abuelo',
+            // Animales
+            owl: 'búho', reindeer: 'reno', squirrel: 'ardilla', bear: 'oso', fox: 'zorro', wolf: 'lobo', rabbit: 'conejo', hedgehog: 'erizo'
+        };
+
+        const emojis = {
+            head: '👤', eye: '👁️', nose: '👃', mouth: '👄', hand: '🤚', foot: '🦶', 
+            knee: '🦵', neck: '🦒', leg: '🦵', arm: '💪',
+            mother: '👩', father: '👨', sister: '👧', brother: '👦', grandmother: '👵', grandfather: '👴',
+            owl: '🦉', reindeer: '🦌', squirrel: '🐿️', bear: '🐻', fox: '🦊', wolf: '🐺', rabbit: '🐰', hedgehog: '🦔'
+        };
+
+        let score = 0;
+        let currentQuestion = '';
+
+        // Función para simular sonido
+        function playSound(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+            
+            // Efecto visual
+            const items = document.querySelectorAll('.item');
+            items.forEach(item => {
+                if (item.onclick && item.onclick.toString().includes(word)) {
+                    item.style.transform = 'scale(1.1)';
+                    setTimeout(() => item.style.transform = 'scale(1)', 200);
+                }
+            });
+        }
+
+        // Función para nueva pregunta del juego
+        function newQuestion() {
+            const words = Object.keys(vocabulary);
+            const correctWord = words[Math.floor(Math.random() * words.length)];
+            currentQuestion = correctWord;
+            
+            const questionEl = document.getElementById('question');
+            questionEl.innerHTML = `${emojis[correctWord]} ¿Cómo se dice "${vocabulary[correctWord]}" en inglés?`;
+            
+            // Generar opciones
+            const options = [correctWord];
+            while (options.length < 4) {
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                if (!options.includes(randomWord)) {
+                    options.push(randomWord);
+                }
+            }
+            
+            // Mezclar opciones
+            options.sort(() => Math.random() - 0.5);
+            
+            const optionsEl = document.getElementById('options');
+            optionsEl.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.textContent = option.toUpperCase();
+                btn.onclick = () => checkAnswer(option, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        // Función para verificar respuesta
+        function checkAnswer(selected, btn) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.onclick = null); // Desactivar clics
+            
+            if (selected === currentQuestion) {
+                btn.classList.add('correct');
+                score += 10;
+                playSound(selected);
+                setTimeout(() => {
+                    alert('¡Correcto! 🎉');
+                    newQuestion();
+                }, 1000);
+            } else {
+                btn.classList.add('wrong');
+                options.forEach(opt => {
+                    if (opt.textContent.toLowerCase() === currentQuestion) {
+                        opt.classList.add('correct');
+                    }
+                });
+                setTimeout(() => {
+                    alert('¡Inténtalo de nuevo! 😊');
+                    newQuestion();
+                }, 1500);
+            }
+            
+            document.getElementById('score').textContent = `Puntuación: ${score}`;
+        }
+
+        // Crear estrellas flotantes
+        function createStars() {
+            const starsContainer = document.querySelector('.floating-stars');
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '⭐';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 6 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Inicializar página
+        window.onload = function() {
+            createStars();
+        };
+    </script>
+</body>
+</html>
